@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Portfolio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    /* Reset and base */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 48px 64px;
+      font-family: 'Poppins', sans-serif;
+      background: #101010;
+      /* Dark theme background */
+      color: #e0e0e0;
+      /* Light text */
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+      font-size: 18px;
+    }
+
+    a {
+      color: #ff6f61;
+      /* Coral accent */
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover,
+    a:focus {
+      color: #ff452b;
+      outline: none;
+    }
+
+    /* Layout */
+    header {
+      position: sticky;
+      top: 0;
+      background: #1f1f1f;
+      /* Darker header */
+      box-shadow: 0 4px 10px rgba(255, 111, 97, 0.3);
+      border-radius: 12px;
+      z-index: 1000;
+      margin-bottom: 48px;
+    }
+
+    .header-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 34px;
+      font-weight: 700;
+      color: #ff6f61;
+      user-select: none;
+    }
+
+    nav {
+      display: flex;
+      gap: 40px;
+    }
+
+    nav a {
+      font-weight: 600;
+      font-size: 17px;
+      padding: 10px 0;
+      border-bottom: 3px solid transparent;
+    }
+
+    nav a.active,
+    nav a:hover {
+      border-color: #a71205;
+      color: #fcf6f6;
+    }
+
+    h1 a.active,
+    h1 a:hover {
+      border-color: #a71205;
+      color: #fcf6f6;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 96px;
+    }
+
+    /* Profile Area */
+    .profile-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 52px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-photo {
+      flex: 0 0 300px;
+      max-width: 300px;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow:
+        0 10px 28px rgba(255, 111, 97, 0.5),
+        inset 0 0 30px rgba(255, 111, 97, 0.4);
+      background: #2c2f33;
+    }
+
+    .profile-photo img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .profile-intro {
+      flex: 1 1 450px;
+      max-width: 750px;
+    }
+
+    .profile-intro h1 {
+      font-size: 56px;
+      font-weight: 700;
+      color: #ff6f61;
+      margin-bottom: 24px;
+      line-height: 1.15;
+      min-height: 140px;
+    }
+
+    .animated-text-wrapper {
+      font-size: 26px;
+      color: #ff6f61;
+      margin-bottom: 16px;
+    }
+
+    .animated-text {
+      display: inline-block;
+      border-right: 3px solid #ff6f61;
+      white-space: nowrap;
+      overflow: hidden;
+      font-weight: 600;
+      font-size: 26px;
+      animation: blink-caret 1s step-end infinite;
+    }
+
+    @keyframes blink-caret {
+
+      0%,
+      100% {
+        border-color: transparent;
+      }
+
+      50% {
+        border-color: #f0eeee;
+      }
+    }
+
+    .profile-intro p {
+      font-size: 20px;
+      max-width: 650px;
+      line-height: 1.6;
+      color: #bbb;
+      margin-bottom: 12px;
+    }
+
+
+    /* Sections */
+    section {
+      padding-top: 8px;
+    }
+
+
+    h2.section-title {
+      font-size: 38px;
+      font-weight: 700;
+      margin-bottom: 34px;
+      padding: 14px 30px;
+      background-color: #ff6f61;
+      /* coral background */
+      border-radius: 14px;
+      display: inline-block;
+      color: #1f1f1f;
+      box-shadow:
+        1px 1px 6px rgba(0, 0, 0, 0.25),
+        inset 0 3px 7px rgba(255 255 255 / 0.2);
+    }
+
+    /* Cards */
+    .card {
+      background: #1e1f25;
+      border-radius: 20px;
+      box-shadow:
+        8px 8px 25px rgba(0, 0, 0, 0.8),
+        inset -5px -5px 15px rgba(255 255 255 / 0.1),
+        inset 5px 5px 15px rgba(0 0 0 / 0.5);
+      padding: 40px 44px;
+    }
+
+    /* Skills Section */
+    .skills-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 48px;
+      padding-bottom: 16px;
+      scrollbar-width: thin;
+      scrollbar-color: #ff6f61 transparent;
+    }
+
+    .skills-container::-webkit-scrollbar {
+      height: 12px;
+    }
+
+    .skills-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .skills-container::-webkit-scrollbar-thumb {
+      background-color: #ff6f61;
+      border-radius: 30px;
+      border: 4px solid transparent;
+      background-clip: content-box;
+    }
+
+    .skill-item {
+      flex: 0 0 150px;
+      text-align: center;
+      color: #ff6f61;
+      font-weight: 700;
+      font-size: 19px;
+      user-select: none;
+    }
+
+    .skill-item img {
+      border-radius: 20px;
+      box-shadow:
+        0 8px 20px rgba(255, 111, 97, 0.5),
+        inset 0 0 22px rgba(255, 111, 97, 0.3);
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      margin-bottom: 14px;
+      background: #292b31;
+      padding: 18px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .skill-item:hover img {
+      transform: scale(1.14);
+      box-shadow:
+        0 18px 40px rgba(255, 111, 97, 0.7),
+        inset 0 0 30px rgba(255, 111, 97, 0.6);
+    }
+
+    .skill-description {
+      margin-top: 14px;
+      font-size: 15px;
+      color: #dda29b;
+      line-height: 1.4;
+      min-height: 66px;
+    }
+
+    /* Work Experience */
+    .experience-list {
+      list-style: none;
+      padding-left: 0;
+      max-width: 900px;
+    }
+
+    .experience-item {
+      margin-bottom: 48px;
+      padding: 36px 36px;
+      border-radius: 28px;
+      color: #f0e7e2;
+      position: relative;
+      background: linear-gradient(145deg, #442c3e, #6d4461);
+      box-shadow:
+        12px 12px 34px rgba(0, 0, 0, 0.6),
+        inset -10px -10px 24px rgba(255 160 147 / 0.75),
+        inset 10px 10px 24px rgba(0 0 0 / 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .experience-item:nth-child(even) {
+      background: linear-gradient(145deg, #6d4461, #442c3e);
+      box-shadow:
+        12px 12px 34px rgba(0, 0, 0, 0.65),
+        inset 10px 10px 26px rgba(255 160 147 / 0.8),
+        inset -10px -10px 26px rgba(0 0 0 / 0.25);
+      transform-style: preserve-3d;
+    }
+
+    .experience-item:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow:
+        20px 22px 56px rgba(248, 236, 234, 0.9),
+        inset 0 0 56px rgba(255, 111, 97, 0.7);
+    }
+
+    .experience-title {
+      font-weight: 700;
+      font-size: 26px;
+      color: #f5b7b1;
+      margin-bottom: 12px;
+    }
+
+    .experience-company {
+      font-weight: 600;
+      font-size: 18px;
+      color: #f9cfc9;
+      margin-bottom: 10px;
+    }
+
+    .experience-date {
+      font-size: 15px;
+      color: #d99893;
+      margin-bottom: 22px;
+      font-style: italic;
+    }
+
+    .experience-description {
+      font-size: 18px;
+      color: #f7d4d0;
+      line-height: 1.7;
+    }
+
+    /* To-Do List */
+    .todo-app {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .todo-input-form {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .todo-input {
+      flex: 1;
+      padding: 16px 20px;
+      border-radius: 20px;
+      border: 1.6px solid #d99893;
+      font-size: 19px;
+      transition: border-color 0.3s ease;
+      background: #2e2f33;
+      color: #f7d4d0;
+    }
+
+    .todo-input::placeholder {
+      color: #b8908a;
+    }
+
+    .todo-input:focus {
+      outline: none;
+      border-color: #ff6f61;
+      box-shadow: 0 0 12px #ff6f61cc;
+    }
+
+    .todo-button {
+      background-color: #ff6f61;
+      color: #1f1f1f;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 19px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .todo-button:hover,
+    .todo-button:focus {
+      background-color: #e6544a;
+      outline: none;
+    }
+
+    .todo-list {
+      list-style: none;
+      padding: 0;
+      max-height: 360px;
+      overflow-y: auto;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      background: #3d3e43;
+      border-radius: 20px;
+      padding: 16px 22px;
+      margin-bottom: 18px;
+      box-shadow:
+        6px 6px 15px rgba(0, 0, 0, 0.7),
+        inset 0 0 12px rgba(255 111 97 / 0.4);
+      transition: background-color 0.3s ease;
+      color: #f7d4d0;
+      font-size: 19px;
+    }
+
+    .todo-item.completed {
+      background: #ff6f61;
+      box-shadow:
+        0 0 20px #ff6f61cc,
+        inset 0 0 20px #ff6f61cc;
+      text-decoration: line-through;
+      color: #1f1f1f;
+    }
+
+    .todo-checkbox {
+      margin-right: 20px;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      accent-color: #ff6f61;
+    }
+
+    .todo-text {
+      flex: 1;
+      user-select: none;
+    }
+
+    .todo-delete-btn {
+      background: transparent;
+      border: none;
+      color: #f9968f;
+      font-size: 30px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      user-select: none;
+      transition: color 0.3s ease;
+    }
+
+    .todo-delete-btn:hover,
+    .todo-delete-btn:focus {
+      color: #cc4c44;
+      outline: none;
+    }
+
+    /* Contact Section */
+    a:hover {
+      color: chartreuse;
+      outline: grey;
+    }
+
+    .contact-info {
+      max-width: 480px;
+      margin: 0 auto;
+      font-size: 18px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 26px;
+      color: #ff6f61;
+      font-weight: 600;
+    }
+
+    .material-icons {
+      color: #ff6f61;
+      font-size: 32px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      body {
+        margin: 32px 28px;
+        font-size: 16px;
+      }
+
+      .profile-intro h1 {
+        font-size: 40px;
+        min-height: 120px;
+      }
+
+      .profile-intro p {
+        font-size: 17px;
+        max-width: 100%;
+      }
+
+      .skill-item {
+        width: 130px;
+        font-size: 16px;
+      }
+
+      .skill-description {
+        font-size: 13px;
+        min-height: 48px;
+      }
+    }
+
+    @media (max-width: 550px) {
+      body {
+        margin: 24px 20px;
+        font-size: 15px;
+      }
+
+      .header-container {
+        padding: 16px 20px;
+      }
+
+      .profile-section {
+        flex-direction: column;
+      }
+
+      .profile-photo {
+        max-width: 100%;
+        width: 240px;
+        margin: 0 auto;
+      }
+
+      .profile-intro {
+        max-width: 100%;
+        flex: none;
+      }
+
+      .profile-intro h1 {
+        font-size: 30px;
+        min-height: 100px;
+      }
+
+      nav {
+        gap: 16px;
+        font-size: 15px;
+      }
+
+      .skills-container {
+        gap: 28px;
+      }
+
+      .skill-item {
+        width: 110px;
+      }
+
+      .card {
+        padding: 24px 24px;
+      }
+
+      .todo-app {
+        max-width: 100%;
+      }
+
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+
+<body>
+  <header>
+    <div class="header-container" role="banner">
+      <div class="logo" tabindex="0">My Portfolio</div>
+      <nav aria-label="Primary navigation">
+        <a href="#profile" class="nav-link" aria-current="page">Profile</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#experience" class="nav-link">Project Experience</a>
+        <a href="#todo" class="nav-link">To-Do List</a>
+        <a href="Protfolio.html" class="nav-link">Product Page</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Profile Section -->
+    <section id="profile" class="profile-section" aria-label="Profile section">
+      <div class="profile-photo" aria-label="Profile photo">
+        <img src="prof.jpg"
+          alt="Portrait photograph of the portfolio owner with a friendly, professional smile, wearing casual business attire, bright background" />
+      </div>
+      <div class="profile-intro">
+        <h1><a>Hello !, I'm Krishnnarayan</h1></a>
+        <div class="animated-text-wrapper" aria-live="polite" aria-atomic="true" aria-relevant="additions">
+          <a><span class="animated-text" id="animated-text"></span></a>
+        </div>
+        currently pursuing a B.Tech in Computer Science Engineering with a specialization in Cyber Security from GEC
+        Samastipur.
+        With a keen interest in the intersection of technology and security,
+        I am passionate about leveraging my skills to contribute to the ever-evolving field of cybersecurity..</p>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" aria-label="Skills section">
+      <h2 class="section-title">Skills</h2>
+      <div class="card skills-container" role="list" aria-label="List of skills with logos and labels">
+        <div class="skill-item" role="listitem" tabindex="0">
+          <img src="html45.png" alt="HTML5 logo icon bright coral on dark background" />
+          <div>HTML</div>
+        </div>
+        <div class="skill-item" role="listitem" tabindex="0">
+          <img src="css.png" alt="CSS3 logo icon warm coral on dark background" />
+          <div>CSS</div>
+        </div>
+        <div class="skill-item" role="listitem" tabindex="0">
+          <img src="java.png" alt="JavaScript logo icon pastel coral on dark background" />
+          <div>JavaScript</div>
+        </div>
+        <div class="skill-item" role="listitem" tabindex="0">
+          <img src="c34.png" alt="React logo icon lighter coral on dark background" />
+          <div>C++</div>
+        </div>
+        <div class="skill-item" role="listitem" tabindex="0">
+          <img src="cc.png" alt="Node.js logo icon coral on dark background" />
+          <div>C</div>
+        </div>
+        <div class="skill-item" role="listitem" tabindex="0">
+          <img src="docoff.png" alt="TypeScript logo icon deep coral on dark background" />
+          <div>Documentation</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work Experience Section -->
+    <section id="experience" aria-label="Work Experience section">
+      <h2 class="section-title">Project Experience</h2>
+      <ul class="experience-list" role="list">
+        <li class="experience-item" tabindex="0">
+          <h3 class="experience-title">Created A Working Webpage </h3>
+          <p class="experience-company">Apex Internship Task 1</p>
+          <p class="experience-date">June-2025</p>
+          <p class="experience-description">
+            I’m excited to share that I’ve successfully completed Task 1 of my Web Development internship at Apex
+            Planet.
+            Eager to continue exploring new technologies and enhancing my skills through this practical experience.
+          </p>
+        </li>
+        <li class="experience-item" tabindex="0">
+          <h3 class="experience-title">Building a TO-DO List </h3>
+          <p class="experience-company">Apex Internship Task 2</p>
+          <p class="experience-date">June-2025</p>
+          <p class="experience-description"></p>
+            As part of my internship project, I successfully built an interactive to-do list using HTML, CSS, and
+            JavaScript. This task helped me strengthen my skills in DOM manipulation, allowing users to dynamically add
+            and remove tasks in real-time.
+            Gained hands-on experience with:
+            Creating and modifying HTML elements with JavaScript
+            Handling user input and events
+            Updating the UI dynamically based on user actions
+            Excited to keep building more interactive web applications! 💻🚀 </p>
+        </li>
+        <li class="experience-item" tabindex="0">
+          <h3 class="experience-title">Building a Joke and Quiz Generating Webpage</h3>
+          <p class="experience-company">Apex Internship Task 3</p>
+          <p class="experience-date">June-2025</p>
+          <p class="experience-description">
+            This phase focused on building interactive JavaScript projects using public APIs — a great step forward in strengthening my frontend development skills.
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- To-Do List Section -->
+    <section id="todo" aria-label="To-Do List section">
+      <h2 class="section-title">To-Do List</h2>
+      <div class="card todo-app" role="application" aria-live="polite" aria-atomic="false">
+        <form id="todo-form" class="todo-input-form" aria-label="Add new to-do">
+          <input type="text" id="todo-input" class="todo-input" aria-required="true" placeholder="Add a new task..."
+            autocomplete="off" />
+          <button type="submit" class="todo-button" aria-label="Add task">Add</button>
+        </form>
+        <ul id="todo-list" class="todo-list" role="list" aria-label="List of tasks">
+          <!-- To-do items inserted here by JS -->
+        </ul>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" aria-label="Contact Information section">
+      <h2 class="section-title">Contact Info</h2>
+      <div class="card contact-info">
+        <div class="contact-item">
+          <span class="material-icons" aria-hidden="true">email</span>
+          <a href="https://mail.google.com/mail/u/0/#inbox?compose=new">krishnarayan9977@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          <span class="material-icons" aria-hidden="true">location_on</span>
+          <a
+            herf=" https://www.google.com/maps/place/Madhepura,+Bihar+852113/@25.9239673,86.7946387,15z/data=!3m1!4b1!4m6!3m5!1s0x39ee36d1bffc3331:0x4ceb43c05d2261fb!8m2!3d25.9239677!4d86.7946387!16zL20vMDVwbmg4?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D">
+            Madhepura, Bihar.</a>
+        </div>
+        <div class="contact-item">
+          <span class="material-icons" aria-hidden="true">school</span>
+          <span>Government Engineering College, Samastipur</span>
+        </div>
+        <div class="contact-item">
+          <span class="material-icons" aria-hidden="true">link</span>
+          <a href="https://github.com/tech-kn28" target="_blank" rel="noopener noreferrer">github.com/kn-tech</a>
+        </div>
+        <div class="contact-item">
+          <span class="material-icons" aria-hidden="true">link</span>
+          <a href="https://www.linkedin.com/in/krishnnarayan-kumar-ab7b87302/" target="_blank"
+            rel="noopener noreferrer">linkedin/krishnnarayan</a>
+        </div>
+      </div>
+    </section>
+    <footer><center>
+      &copy; 2025 Krishnnarayan. All rights reserved.
+    </center></footer>
+    
+  </main>
+
+  <script>
+    // Animated typing text for profile
+    const animatedTextElem = document.getElementById('animated-text');
+    const phrases = [
+      "Tech Enthusiast !",
+      "Open Source Contributor !",
+      "Tech Communicator !",
+      "Frontend Developer !"
+    ];
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    const typingSpeed = 100;
+    const deletingSpeed = 50;
+    const delayAfterTyping = 2000;
+
+    function type() {
+      const currentPhrase = phrases[phraseIndex];
+      if (!deleting) {
+        animatedTextElem.textContent = currentPhrase.slice(0, charIndex + 1);
+        charIndex++;
+        if (charIndex === currentPhrase.length) {
+          deleting = true;
+          setTimeout(type, delayAfterTyping);
+        } else {
+          setTimeout(type, typingSpeed);
+        }
+      } else {
+        animatedTextElem.textContent = currentPhrase.slice(0, charIndex - 1);
+        charIndex--;
+        if (charIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          setTimeout(type, typingSpeed);
+        } else {
+          setTimeout(type, deletingSpeed);
+        }
+      }
+    }
+    type();
+
+    // To-Do List functionality
+    const todoForm = document.getElementById('todo-form');
+    const todoInput = document.getElementById('todo-input');
+    const todoList = document.getElementById('todo-list');
+
+    // Load tasks from localStorage
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function renderTasks() {
+      todoList.innerHTML = '';
+      if (tasks.length === 0) {
+        const emptyMsg = document.createElement('li');
+        emptyMsg.textContent = "No tasks added yet.";
+        emptyMsg.style.color = '#7f8c8d';
+        emptyMsg.style.fontStyle = 'italic';
+        todoList.appendChild(emptyMsg);
+        return;
+      }
+      tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.className = 'todo-item' + (task.completed ? ' completed' : '');
+        li.setAttribute('role', 'listitem');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.completed;
+        checkbox.className = 'todo-checkbox';
+        checkbox.setAttribute('aria-label', `Mark task "${task.text}" as completed`);
+        checkbox.addEventListener('change', () => {
+          tasks[index].completed = checkbox.checked;
+          saveTasks();
+          renderTasks();
+        });
+
+        const span = document.createElement('span');
+        span.textContent = task.text;
+        span.className = 'todo-text';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'todo-delete-btn';
+        deleteBtn.innerHTML = '&#x2715;';
+        deleteBtn.setAttribute('aria-label', `Delete task "${task.text}"`);
+        deleteBtn.addEventListener('click', () => {
+          tasks.splice(index, 1);
+          saveTasks();
+          renderTasks();
+        });
+
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
+        todoList.appendChild(li);
+      });
+    }
+
+    todoForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const text = todoInput.value.trim();
+      if (text) {
+        tasks.push({ text, completed: false });
+        saveTasks();
+        renderTasks();
+        todoInput.value = '';
+        todoInput.focus();
+      }
+    });
+
+    // Initial render
+    renderTasks();
+
+    // Update nav active links on scroll
+    const navLinks = document.querySelectorAll('nav a.nav-link');
+    const sections = Array.from(navLinks).map(link => document.getElementById(link.getAttribute('href').substring(1)));
+
+    window.addEventListener('scroll', () => {
+      const scrollPos = window.scrollY + 80; // header height offset
+      sections.forEach((section, idx) => {
+        if (section.offsetTop <= scrollPos && (section.offsetTop + section.offsetHeight) > scrollPos) {
+          navLinks.forEach(link => link.classList.remove('active'));
+          navLinks[idx].classList.add('active');
+        }
+      });
+    });
+
+  </script>
+</body>
+
+</html>
