@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroShop - Product Comparison</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --text: #1f2937;
+            --light: #f9fafb;
+            --gray: #e5e7eb;
+            --dark-gray: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .main {
+            padding: 2rem 5%;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            text-align: center;
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 2rem;
+        }
+
+        .filter {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray);
+            border-radius: 0.25rem;
+            background-color: white;
+            color: var(--text);
+            cursor: pointer;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .filter:hover {
+            border-color: var(--primary);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .product-details {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            color: var(--dark-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .product-description {
+            font-size: 0.875rem;
+            color: var(--dark-gray);
+            margin-bottom: 1.25rem;
+            flex-grow: 1;
+        }
+
+        .product-specs {
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+        }
+
+        .spec-item {
+            display: flex;
+            margin-bottom: 0.25rem;
+        }
+
+        .spec-label {
+            font-weight: 600;
+            margin-right: 0.5rem;
+            min-width: 80px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .add-to-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .comparison-highlight {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-bottom-left-radius: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Loader for sorting animation */
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Sorting animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span>ElectroShop</span>
+            </a>
+            <div class="nav-links">
+                <!-- Navigation links would go here -->
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <h1 class="page-title">Premium Electronics Comparison</h1>
+        
+        <div class="filter-container">
+            <select id="sort-select" class="filter">
+                <option value="">Sort by</option>
+                <option value="price-low-to-high">Price: Low to High</option>
+                <option value="price-high-to-low">Price: High to Low</option>
+            </select>
+        </div>
+        
+        <div id="loader" class="loader">
+            Sorting products...
+        </div>
+        
+        <div id="products-container" class="products-grid">
+            <!-- Products will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <script>
+        // Sample product data - 5 products for comparison
+        const products = [
+            {
+                id: 1,
+                title: "Ultra HD Smart TV",
+                category: "Television",
+                description: "Experience stunning picture quality with our premium smart TV",
+                specs: {
+                    "Screen Size": "55 inch",
+                    "Resolution": "4K Ultra HD",
+                    "HDR": "Yes",
+                    "Smart Features": "Built-in apps, Voice control"
+                },
+                price: 899.99,
+                image: "https://images.unsplash.com/photo-1567691932180-64f4a811c0e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=900&h=600&q=80",
+                highlight: "Best Value"
+            },
+            {
+                id: 2,
+                title: "Wireless Headphones Pro",
+                category: "Audio",
+                description: "Premium noise-cancelling headphones for immersive audio",
+                specs: {
+                    "Battery Life": "30 hours",
+                    "Noise Cancelling": "Active",
+                    "Bluetooth": "5.0",
+                    "Water Resistance": "IPX4"
+                },
+                price: 349.99,
+                image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=900&h=600&q=80",
+                highlight: "Editor's Choice"
+            },
+            {
+                id: 3,
+                title: "Smartphone Pro Max",
+                category: "Mobile",
+                description: "Flagship smartphone with professional-grade camera system",
+                specs: {
+                    "Screen": "6.7 inch OLED",
+                    "Processor": "Latest Gen",
+                    "Storage": "256GB",
+                    "Camera": "Triple lens 48MP"
+                },
+                price: 1099.99,
+                image: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=900&h=600&q=80",
+                highlight: "Top Seller"
+            },
+            {
+                id: 4,
+                title: "Gaming Laptop Elite",
+                category: "Computers",
+                description: "High-performance laptop for gamers and creators",
+                specs: {
+                    "Processor": "Intel i9",
+                    "Graphics": "RTX 3080",
+                    "RAM": "32GB",
+                    "Storage": "1TB SSD"
+                },
+                price: 2499.99,
+                image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=900&h=600&q=80",
+                highlight: "Premium Pick"
+            },
+            {
+                id: 5,
+                title: "Smart Watch Series 5",
+                category: "Wearables",
+                description: "Advanced health monitoring with always-on display",
+                specs: {
+                    "Battery Life": "18 hours",
+                    "Health Sensors": "ECG, SpO2",
+                    "Water Resistance": "50m",
+                    "Compatibility": "iOS & Android"
+                },
+                price: 399.99,
+                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=900&h=600&q=80",
+                highlight: "New Release"
+            }
+        ];
+
+        // DOM elements
+        const productsContainer = document.getElementById('products-container');
+        const sortSelect = document.getElementById('sort-select');
+        const loader = document.getElementById('loader');
+
+        // Display products
+        function displayProducts(productsToDisplay) {
+            productsContainer.innerHTML = '';
+            
+            productsToDisplay.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                // Create specs HTML
+                let specsHTML = '<div class="product-specs">';
+                for (const [key, value] of Object.entries(product.specs)) {
+                    specsHTML += `
+                        <div class="spec-item">
+                            <span class="spec-label">${key}:</span>
+                            <span class="spec-value">${value}</span>
+                        </div>
+                    `;
+                }
+                specsHTML += '</div>';
+                
+                productCard.innerHTML = `
+                    <div style="position: relative;">
+                        <img src="${product.image}" alt="${product.title}" class="product-image">
+                        ${product.highlight ? `<span class="comparison-highlight">${product.highlight}</span>` : ''}
+                    </div>
+                    <div class="product-details">
+                        <span class="product-category">${product.category}</span>
+                        <h3 class="product-title">${product.title}</h3>
+                        <p class="product-description">${product.description}</p>
+                        ${specsHTML}
+                        <div class="product-footer">
+                            <span class="product-price">$${product.price.toFixed(2)}</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+                productsContainer.appendChild(productCard);
+            });
+        }
+
+        // Sort products
+        function sortProducts(sortType) {
+            let sortedProducts = [...products]; // Create a copy of the products array
+            
+            switch(sortType) {
+                case 'price-low-to-high':
+                    sortedProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high-to-low':
+                    sortedProducts.sort((a, b) => b.price - a.price);
+                    break;
+                default:
+                    // No sorting (original order)
+                    break;
+            }
+            
+            return sortedProducts;
+        }
+
+        // Event listener for sorting
+        sortSelect.addEventListener('change', function() {
+            const sortType = this.value;
+            
+            // Show loader
+            loader.style.display = 'block';
+            productsContainer.style.opacity = '0.5';
+            
+            // Simulate loading delay for better UX
+            setTimeout(() => {
+                const sortedProducts = sortProducts(sortType);
+                displayProducts(sortedProducts);
+                
+                // Hide loader
+                loader.style.display = 'none';
+                productsContainer.style.opacity = '1';
+            }, 500);
+        });
+
+        // Initial display of products
+        displayProducts(products);
+    </script>
+</body>
+</html>
